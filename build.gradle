@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+version = '1.0'
+group = 'com.example.cooldownreflect'
+archivesBaseName = 'reflect_cooldown_patch'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'snapshot', version: '20171003-1.12'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net/' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2864'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs)
+}
+
+jar {
+    manifest {
+        attributes(
+                "FMLCorePlugin": "com.example.cooldownreflect.CoreModPlugin",
+                "FMLCorePluginContainsFMLMod": "true"
+        )
+    }
+}
+
+jar.finalizedBy('reobfJar')
